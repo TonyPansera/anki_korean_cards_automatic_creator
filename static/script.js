@@ -17,15 +17,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     generateBtn.addEventListener("click", async () => {
         const words = wordsInput.value.trim();
+        const deckName = document.getElementById("deck-input").value.trim();
+        const modelName = document.getElementById("model-input").value.trim();
         
         if (!words) {
             setStatus("error", "Error: Please enter at least one word.");
             return;
         }
 
+        if (!deckName || !modelName) {
+            setStatus("error", "Error: Deck Name and Note Type cannot be empty.");
+            return;
+        }
+
         // Disable UI
         generateBtn.disabled = true;
         wordsInput.disabled = true;
+        document.getElementById("deck-input").disabled = true;
+        document.getElementById("model-input").disabled = true;
         
         // Set loading state
         setStatus("loading", "⏳ Processing via AI and sending to Anki...");
@@ -36,7 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ words: words })
+                body: JSON.stringify({ 
+                    words: words,
+                    deck_name: deckName,
+                    model_name: modelName
+                })
             });
 
             const data = await response.json();
@@ -59,6 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // Re-enable UI
             generateBtn.disabled = false;
             wordsInput.disabled = false;
+            document.getElementById("deck-input").disabled = false;
+            document.getElementById("model-input").disabled = false;
             wordsInput.focus();
         }
     });

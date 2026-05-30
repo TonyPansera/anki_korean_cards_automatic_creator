@@ -12,8 +12,8 @@ A local web application (Flask + HTML/JS/CSS) that automatically generates Anki 
 ## Anki Configuration
 
 1. Make sure the **AnkiConnect** add-on is installed and working in your Anki desktop app.
-2. Ensure you have a deck named: `korean_vocab` (or modify `DECK_NAME` in `app.py`).
-3. Ensure you have a custom note type named: `Vocab_new_cards` (or modify `MODEL_NAME` in `app.py`) containing exactly these fields:
+2. Note the exact name of the Deck you want to use (e.g., `korean_vocab`). You can enter this directly in the web UI.
+3. Ensure you have a custom note type (e.g., `Vocab_new_cards`) containing exactly these fields:
    - `Hangeul`
    - `Traduction`
    - `Image`
@@ -50,6 +50,7 @@ A local web application (Flask + HTML/JS/CSS) that automatically generates Anki 
    python app.py
    ```
 3. Open your browser and go to [http://127.0.0.1:5000](http://127.0.0.1:5000).
-4. Enter your Korean vocabulary words (one word per line) in the text area.
-5. Click **Generate and send to Anki**.
-6. The app will contact OpenAI to enrich your data, and then automatically send each card to Anki!
+4. Verify or change the **Deck Name** and **Note Type (Model)** in the provided input fields to match your Anki setup.
+5. Enter your Korean vocabulary words (one word per line) in the text area.
+6. Click **Generate and send to Anki**.
+7. The app will contact OpenAI to enrich your data, and then automatically send each card to Anki!

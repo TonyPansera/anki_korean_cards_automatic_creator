@@ -17,6 +17,17 @@
             <p>Automatically add enriched Korean vocabulary to your Anki deck.</p>
         </header>
 
+        <section class="config-section" style="display: flex; gap: 16px; margin-bottom: 24px;">
+            <div style="flex: 1;">
+                <label for="deck-input">Deck Name:</label>
+                <input type="text" id="deck-input" value="korean_vocab" placeholder="e.g. korean_vocab">
+            </div>
+            <div style="flex: 1;">
+                <label for="model-input">Note Type (Model):</label>
+                <input type="text" id="model-input" value="Vocab_new_cards" placeholder="e.g. Vocab_new_cards">
+            </div>
+        </section>
+
         <section class="input-section">
             <label for="words-input">Word list (one per line):</label>
             <textarea id="words-input" rows="10" placeholder="사과&#10;차&#10;걸어가다"></textarea>

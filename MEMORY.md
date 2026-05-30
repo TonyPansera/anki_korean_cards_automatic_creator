@@ -14,8 +14,8 @@
 - `static/script.js`: Client-side fetch logic.
 
 ## Design Notes
-- **Anki Deck Target**: `Coréen::Vocabulaire`
-- **Anki Note Type Target**: `Coréen - Parfait`
+- **Anki Deck Target**: Dynamically input from UI (defaults to `korean_vocab`)
+- **Anki Note Type Target**: Dynamically input from UI (defaults to `Vocab_new_cards`)
 - Duplicate checking is enabled (no duplicates allowed).
 - The `Image` field is strictly passed as empty.
 

@@ -42,6 +42,9 @@ def generate():
         return jsonify({"success": False, "error": "Invalid request. Missing 'words'."}), 400
     
     words_input = data["words"]
+    deck_name = data.get("deck_name", DECK_NAME)
+    model_name = data.get("model_name", MODEL_NAME)
+
     # Filter empty lines
     words_list = [w.strip() for w in words_input.split("\n") if w.strip()]
     
@@ -94,8 +97,8 @@ def generate():
             "version": 6,
             "params": {
                 "note": {
-                    "deckName": DECK_NAME,
-                    "modelName": MODEL_NAME,
+                    "deckName": deck_name,
+                    "modelName": model_name,
                     "fields": fields,
                     "options": {
                         "allowDuplicate": False
