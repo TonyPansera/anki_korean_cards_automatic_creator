@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur Anki Coréen</title>
+    <!-- Google Fonts for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>Générateur de Cartes Anki</h1>
+            <p>Ajoutez automatiquement du vocabulaire coréen enrichi à votre deck Anki.</p>
+        </header>
+
+        <section class="input-section">
+            <label for="words-input">Liste de mots (un par ligne) :</label>
+            <textarea id="words-input" rows="10" placeholder="사과&#10;차&#10;걸어가다"></textarea>
+        </section>
+
+        <section class="action-section">
+            <button id="generate-btn">Générer et envoyer à Anki</button>
+        </section>
+
+        <section id="status-container" class="status-container idle">
+            <div id="status-message" class="status-message">
+                Prêt à générer.
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
