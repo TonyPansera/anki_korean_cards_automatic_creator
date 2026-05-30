@@ -1,19 +1,19 @@
-# Générateur de Cartes Anki pour le Coréen
+# Anki Korean Flashcard Generator
 
-Une application web locale (Flask + HTML/JS/CSS) permettant de générer automatiquement des cartes Anki pour le vocabulaire coréen en utilisant l'API d'OpenAI et AnkiConnect. L'application récupère les traductions, les définitions, des phrases d'exemple conjuguées et des notes grammaticales.
+A local web application (Flask + HTML/JS/CSS) that automatically generates Anki flashcards for Korean vocabulary using the OpenAI API and AnkiConnect. The app fetches English translations, Korean definitions, conjugated example sentences, grammatical notes, and Hanja.
 
-## Prérequis
+## Requirements
 
 - **Python 3.8+**
-- **Anki** installé et en cours d'exécution
-- **AnkiConnect** (Module complémentaire Anki - Code : `2055492159`) installé et configuré
-- Une clé **API OpenAI**
+- **Anki** installed and running
+- **AnkiConnect** (Anki add-on - Code: `2055492159`) installed and configured
+- An **OpenAI API Key**
 
-## Configuration Anki
+## Anki Configuration
 
-1. Assurez-vous que l'extension **AnkiConnect** est bien installée et fonctionnelle dans Anki.
-2. Créez un deck nommé : `Coréen::Vocabulaire` (ou modifiez les variables dans `app.py`).
-3. Créez un type de note personnalisé nommé : `Coréen - Parfait` possédant exactement les champs suivants :
+1. Make sure the **AnkiConnect** add-on is installed and working in your Anki desktop app.
+2. Ensure you have a deck named: `korean_vocab` (or modify `DECK_NAME` in `app.py`).
+3. Ensure you have a custom note type named: `Vocab_new_cards` (or modify `MODEL_NAME` in `app.py`) containing exactly these fields:
    - `Hangeul`
    - `Traduction`
    - `Image`
@@ -24,32 +24,32 @@ Une application web locale (Flask + HTML/JS/CSS) permettant de générer automat
 
 ## Installation
 
-1. Clonez ou téléchargez ce dossier sur votre machine.
-2. Ouvrez un terminal dans le dossier du projet :
+1. Clone or download this repository to your machine.
+2. Open a terminal in the project folder:
    ```bash
-   # Création de l'environnement virtuel
+   # Create a virtual environment
    python -m venv venv
    
-   # Activation de l'environnement virtuel (Windows)
+   # Activate the virtual environment (Windows)
    .\venv\Scripts\activate
-   # Sur Mac/Linux : source venv/bin/activate
+   # On Mac/Linux: source venv/bin/activate
    
-   # Installation des dépendances
+   # Install dependencies
    pip install -r requirements.txt
    ```
-3. Créez un fichier `.env` à la racine du projet (vous pouvez copier `.env.example`) et insérez votre clé API :
+3. Create a `.env` file at the root of the project (you can copy `.env.example`) and insert your API key:
    ```env
-   OPENAI_API_KEY=sk-VOTRE_CLE_API_ICI
+   OPENAI_API_KEY=sk-YOUR_API_KEY_HERE
    ```
 
-## Démarrage et Utilisation
+## Startup and Usage
 
-1. Assurez-vous qu'Anki est ouvert en arrière-plan.
-2. Démarrez l'application Flask :
+1. Make sure Anki is open in the background.
+2. Start the Flask application:
    ```bash
    python app.py
    ```
-3. Ouvrez votre navigateur et allez sur [http://127.0.0.1:5000](http://127.0.0.1:5000).
-4. Entrez vos mots de vocabulaire en coréen (un mot par ligne) dans la zone de texte.
-5. Cliquez sur **Générer et envoyer à Anki**.
-6. L'application contactera OpenAI pour enrichir vos données, puis enverra automatiquement chaque carte dans Anki !
+3. Open your browser and go to [http://127.0.0.1:5000](http://127.0.0.1:5000).
+4. Enter your Korean vocabulary words (one word per line) in the text area.
+5. Click **Generate and send to Anki**.
+6. The app will contact OpenAI to enrich your data, and then automatically send each card to Anki!

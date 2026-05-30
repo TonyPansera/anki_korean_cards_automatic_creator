@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Générateur Anki Coréen</title>
+    <title>Anki Korean Generator</title>
     <!-- Google Fonts for modern typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,22 +13,22 @@
 <body>
     <main class="container">
         <header>
-            <h1>Générateur de Cartes Anki</h1>
-            <p>Ajoutez automatiquement du vocabulaire coréen enrichi à votre deck Anki.</p>
+            <h1>Anki Card Generator</h1>
+            <p>Automatically add enriched Korean vocabulary to your Anki deck.</p>
         </header>
 
         <section class="input-section">
-            <label for="words-input">Liste de mots (un par ligne) :</label>
+            <label for="words-input">Word list (one per line):</label>
             <textarea id="words-input" rows="10" placeholder="사과&#10;차&#10;걸어가다"></textarea>
         </section>
 
         <section class="action-section">
-            <button id="generate-btn">Générer et envoyer à Anki</button>
+            <button id="generate-btn">Generate and send to Anki</button>
         </section>
 
         <section id="status-container" class="status-container idle">
             <div id="status-message" class="status-message">
-                Prêt à générer.
+                Ready to generate.
             </div>
         </section>
     </main>

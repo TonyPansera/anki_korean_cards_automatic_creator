@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const words = wordsInput.value.trim();
         
         if (!words) {
-            setStatus("error", "Erreur : Veuillez entrer au moins un mot.");
+            setStatus("error", "Error: Please enter at least one word.");
             return;
         }
 
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         wordsInput.disabled = true;
         
         // Set loading state
-        setStatus("loading", "⏳ Traitement par l'IA et envoi à Anki en cours...");
+        setStatus("loading", "⏳ Processing via AI and sending to Anki...");
 
         try {
             const response = await fetch("/api/generate", {
@@ -42,11 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
 
             if (!response.ok || !data.success) {
-                setStatus("error", `Erreur : ${data.error || "Une erreur inconnue s'est produite."}`);
+                setStatus("error", `Error: ${data.error || "An unknown error occurred."}`);
             } else {
-                let successMsg = `✅ Succès ! ${data.success_count} cartes créées avec succès.`;
+                let successMsg = `✅ Success! ${data.success_count} cards created successfully.`;
                 if (data.errors && data.errors.length > 0) {
-                    successMsg += `\nCependant, ${data.errors.length} erreur(s) ont eu lieu (voir console).`;
+                    successMsg += `\nHowever, ${data.errors.length} error(s) occurred (see console).`;
                     console.error("Anki Errors:", data.errors);
                 }
                 setStatus("success", successMsg);
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         } catch (error) {
             console.error("Network Error:", error);
-            setStatus("error", "Erreur réseau : Impossible de contacter le serveur.");
+            setStatus("error", "Network Error: Could not connect to the server.");
         } finally {
             // Re-enable UI
             generateBtn.disabled = false;

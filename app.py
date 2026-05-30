@@ -12,13 +12,24 @@ app = Flask(__name__)
 
 # Constants
 ANKI_URL = "http://localhost:8765"
-DECK_NAME = "Coréen::Vocabulaire"
-MODEL_NAME = "Coréen - Parfait"
+DECK_NAME = "korean_vocab" # Modifié pour correspondre à votre base
+MODEL_NAME = "Vocab_new_cards" # Modifié pour correspondre à votre base
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-SYSTEM_PROMPT = """You are a strict data parsing backend for a Korean-French dictionary app. Analyze the input list of Korean words. For each word, generate its French translation, a short Korean definition, a polite informal example sentence in Korean, helpful grammatical/nuance notes in French, and Hanja if applicable. If a word has multiple meanings, duplicate the entry for each meaning. Return exclusively a JSON object with a single root key 'cards' containing an array of objects matching the specified schema fields. Do not include markdown wrappers or extra text."""
+SYSTEM_PROMPT = """You are a strict data parsing backend for a Korean-French dictionary app. Analyze the input list of Korean words. For each word, generate its English translation, a short Korean definition, a polite informal example sentence in Korean, helpful grammatical/nuance notes in Korean, and Hanja if applicable. If a word has multiple meanings, duplicate the entry for each meaning.
+
+CRITICAL: Return exclusively a JSON object with a single root key 'cards' containing an array of objects. Each object MUST strictly use these exact field names:
+- "Hangeul": The exact word in Korean characters.
+- "Traduction": The primary meaning translated clearly into English.
+- "Image": Leave this as an empty string ("").
+- "Definition_kr": A simple, natural monolingual definition written ENTIRELY in Korean (no French/English).
+- "example_korean": A natural example sentence using the word, strictly conjugated in the polite informal style (해요체), written ENTIRELY in Korean.
+- "notes": Contextual, high-value notes written in Korean.
+- "Hanja": Traditional Chinese characters if applicable, otherwise an empty string ("").
+
+Do not include markdown wrappers or extra text."""
 
 @app.route("/")
 def index():
@@ -53,6 +64,9 @@ def generate():
         )
         
         content = response.choices[0].message.content
+        print("--- OPENAI API RESPONSE ---")
+        print(content)
+        print("---------------------------")
         cards_data = json.loads(content)
         cards = cards_data.get("cards", [])
 
@@ -105,9 +119,16 @@ def generate():
                 "error": "Could not connect to AnkiConnect. Is Anki running with AnkiConnect installed?"
             }), 500
 
+    if success_count == 0 and errors:
+        return jsonify({
+            "success": False,
+            "error": f"Anki refused the addition. First error: {errors[0]}",
+            "errors": errors
+        }), 400
+
     return jsonify({
         "success": True, 
-        "message": f"Succès ! {success_count} cartes créées avec succès.",
+        "message": f"Success! {success_count} cards created successfully.",
         "success_count": success_count,
         "errors": errors,
         "total_attempted": len(cards)
