@@ -1,6 +1,6 @@
 # Anki Korean Flashcard Generator
 
-A local web application (Flask + HTML/JS/CSS) that automatically generates Anki flashcards for Korean vocabulary using the OpenAI API and AnkiConnect. The app fetches English translations, Korean definitions, conjugated example sentences, grammatical notes, and Hanja.
+A local web application (Flask + HTML/JS/CSS) that automatically generates Anki flashcards for Korean vocabulary using the OpenAI API and AnkiConnect. The app fetches English translations, Korean definitions, exactly 5 conjugated example sentences (separated by '|'), grammatical notes, and Hanja.
 
 ## Requirements
 
@@ -21,6 +21,50 @@ A local web application (Flask + HTML/JS/CSS) that automatically generates Anki 
    - `example_korean`
    - `notes`
    - `Hanja`
+4. For the custom card, please put this code in the back template:
+
+*To edit the card code, please go to Tools > Manage Note Types > (you custom created card) > Cards, then you can edit the front and back template.*
+```html
+{{FrontSide}}
+
+<hr id=answer>
+
+{{Traduction}}
+
+<div style='font-family: "Arial"; font-size: 20px;'>Definition: {{Definition_kr}}</div>
+
+{{#Hanja}}
+<div style='font-family: "Arial"; font-size: 20px;'>漢字: {{Hanja}}</div>
+{{/Hanja}}
+
+<div id="raw-examples" style="display: none;">{{example_korean}}</div>
+
+<div style='font-family: "Arial"; font-size: 20px;'>
+    Example: <span id="random-example"></span>
+</div>
+
+<div style='font-family: "Arial"; font-size: 20px;'>{{Image}}</div>
+
+<div style='font-family: "Arial"; font-size: 20px;'>Notes: {{notes}}</div>
+
+<script>
+  (function() {
+    var rawElement = document.getElementById("raw-examples");
+    var rawText = rawElement.innerText || rawElement.textContent;
+    
+    var sentences = rawText.split("|").filter(function(s) { 
+        return s.trim() !== ""; 
+    });
+    
+    if (sentences.length > 0) {
+      var randomIndex = Math.floor(Math.random() * sentences.length);
+      document.getElementById("random-example").innerText = sentences[randomIndex].trim();
+    } else {
+      document.getElementById("random-example").innerText = "Aucun exemple disponible.";
+    }
+  })();
+</script>
+```
 
 ## Installation
 

@@ -18,14 +18,14 @@ MODEL_NAME = "Vocab_new_cards" # Modifié pour correspondre à votre base
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-SYSTEM_PROMPT = """You are a strict data parsing backend for a Korean-French dictionary app. Analyze the input list of Korean words. For each word, generate its English translation, a short Korean definition, a polite informal example sentence in Korean, helpful grammatical/nuance notes in Korean, and Hanja if applicable. If a word has multiple meanings, duplicate the entry for each meaning.
+SYSTEM_PROMPT = """You are a strict data parsing backend for a Korean-English dictionary app. Analyze the input list of Korean words. For each word, generate its English translation, a short Korean definition, exactly 5 polite informal example sentences in Korean, helpful grammatical/nuance notes in Korean, and Hanja if applicable. If a word has multiple meanings, duplicate the entry for each meaning.
 
 CRITICAL: Return exclusively a JSON object with a single root key 'cards' containing an array of objects. Each object MUST strictly use these exact field names:
 - "Hangeul": The exact word in Korean characters.
 - "Traduction": The primary meaning translated clearly into English.
 - "Image": Leave this as an empty string ("").
 - "Definition_kr": A simple, natural monolingual definition written ENTIRELY in Korean (no French/English).
-- "example_korean": A natural example sentence using the word, strictly conjugated in the polite informal style (해요체), written ENTIRELY in Korean.
+- "example_korean": A single string containing EXACTLY 5 natural example sentences using the word, separated by the '|' character (e.g., "Sentence 1.|Sentence 2.|..."). Each sentence must be strictly conjugated in the polite informal style (해요체), written ENTIRELY in Korean.
 - "notes": Contextual, high-value notes written in Korean.
 - "Hanja": Traditional Chinese characters if applicable, otherwise an empty string ("").
 

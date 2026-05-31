@@ -18,6 +18,7 @@
 - **Anki Note Type Target**: Dynamically input from UI (defaults to `Vocab_new_cards`)
 - Duplicate checking is enabled (no duplicates allowed).
 - The `Image` field is strictly passed as empty.
+- The `example_korean` field now stores exactly 5 example sentences joined by the `|` character, intended to be parsed by Anki card JavaScript.
 
 ## Future Enhancements
 - (Empty for now - add ideas here)
