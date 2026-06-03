@@ -21,6 +21,7 @@ A local web application (Flask + HTML/JS/CSS) that automatically generates Anki 
    - `example_korean`
    - `notes`
    - `Hanja`
+   - `sound`
 4. For the custom card, please put this code in the back template:
 
 *To edit the card code, please go to Tools > Manage Note Types > (you custom created card) > Cards, then you can edit the front and back template.*
@@ -52,13 +53,31 @@ A local web application (Flask + HTML/JS/CSS) that automatically generates Anki 
     var rawElement = document.getElementById("raw-examples");
     var rawText = rawElement.innerText || rawElement.textContent;
     
-    var sentences = rawText.split("|").filter(function(s) { 
+    var items = rawText.split("|").filter(function(s) { 
         return s.trim() !== ""; 
     });
     
-    if (sentences.length > 0) {
-      var randomIndex = Math.floor(Math.random() * sentences.length);
-      document.getElementById("random-example").innerText = sentences[randomIndex].trim();
+    if (items.length > 0) {
+      var randomIndex = Math.floor(Math.random() * items.length);
+      var parts = items[randomIndex].split(";;");
+      var sentence = parts[0].trim();
+      var audioFile = parts.length > 1 ? parts[1].trim() : null;
+      
+      document.getElementById("random-example").innerText = sentence;
+      
+      if (audioFile) {
+          // Play the audio
+          var audio = new Audio(audioFile);
+          audio.play();
+          
+          // Add a replay button
+          var btn = document.createElement("button");
+          btn.innerText = "🔊";
+          btn.style.marginLeft = "10px";
+          btn.style.cursor = "pointer";
+          btn.onclick = function() { audio.play(); };
+          document.getElementById("random-example").appendChild(btn);
+      }
     } else {
       document.getElementById("random-example").innerText = "Aucun exemple disponible.";
     }
@@ -98,3 +117,14 @@ A local web application (Flask + HTML/JS/CSS) that automatically generates Anki 
 5. Enter your Korean vocabulary words (one word per line) in the text area.
 6. Click **Generate and send to Anki**.
 7. The app will contact OpenAI to enrich your data, and then automatically send each card to Anki!
+
+## Adding Audio to Existing Cards
+
+If you have cards created before the audio feature was introduced, you can retroactively generate audio for them using the included script.
+
+1. Make sure Anki is open and AnkiConnect is running.
+2. In your terminal, run:
+   ```bash
+   python update_audio.py
+   ```
+3. The script will find all notes in your deck that lack audio, fetch their 5 example sentences, generate the text-to-speech files, and upload them directly into your Anki database.

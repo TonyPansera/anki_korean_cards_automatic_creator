@@ -1,5 +1,7 @@
 import os
 import json
+import base64
+import uuid
 import requests
 from flask import Flask, render_template, request, jsonify
 from openai import OpenAI
@@ -81,15 +83,62 @@ def generate():
     errors = []
     
     for card in cards:
+        hangeul = card.get("Hangeul", "")
+        example_korean = card.get("example_korean", "")
+        
+        # --- TTS AUDIO GENERATION ---
+        audio_tags = []
+        new_example_sentences = []
+        sentences = [s.strip() for s in example_korean.split("|") if s.strip()]
+        
+        if len(sentences) == 5:
+            note_id_temp = str(uuid.uuid4())[:8] # short unique identifier for media files
+            for idx, sentence in enumerate(sentences):
+                filename = f"korean_audio_{note_id_temp}_{idx}.mp3"
+                try:
+                    # Call OpenAI TTS
+                    tts_response = client.audio.speech.create(
+                        model="tts-1",
+                        voice="alloy",
+                        input=sentence
+                    )
+                    audio_base64 = base64.b64encode(tts_response.content).decode('utf-8')
+                    
+                    # Store media file in Anki
+                    store_payload = {
+                        "action": "storeMediaFile",
+                        "version": 6,
+                        "params": {
+                            "filename": filename,
+                            "data": audio_base64
+                        }
+                    }
+                    store_res = requests.post(ANKI_URL, json=store_payload, timeout=30).json()
+                    
+                    if store_res.get("error"):
+                        errors.append(f"Media Error for '{hangeul}' ({idx+1}/5): {store_res['error']}")
+                    else:
+                        stored_filename = store_res.get('result', filename)
+                        audio_tags.append(f"[sound:{stored_filename}]")
+                        new_example_sentences.append(f"{sentence};;{stored_filename}")
+                except Exception as e:
+                    errors.append(f"TTS Error for '{hangeul}' ({idx+1}/5): {str(e)}")
+        else:
+            errors.append(f"Warning: '{hangeul}' generated {len(sentences)} sentences instead of 5. Audio skipped.")
+
+        joined_sound_tags = " | ".join(audio_tags) if len(audio_tags) == 5 else ""
+        joined_examples = " | ".join(new_example_sentences) if len(new_example_sentences) == 5 else example_korean
+
         # Ensure all required fields exist
         fields = {
-            "Hangeul": card.get("Hangeul", ""),
+            "Hangeul": hangeul,
             "Traduction": card.get("Traduction", ""),
             "Image": "", # Forced to empty string as per requirements
             "Definition_kr": card.get("Definition_kr", ""),
-            "example_korean": card.get("example_korean", ""),
+            "example_korean": joined_examples,
             "notes": card.get("notes", ""),
-            "Hanja": card.get("Hanja", "")
+            "Hanja": card.get("Hanja", ""),
+            "sound": joined_sound_tags
         }
         
         anki_payload = {
