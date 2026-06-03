@@ -48,3 +48,6 @@ Thumbs.db
 # Flask stuff:
 instance/
 .webassets-cache
+
+# MEMORY for AIs
+MEMORY.md
