@@ -25,6 +25,8 @@ A local web application (Flask + HTML/JS/CSS) that automatically generates Anki 
 4. For the custom card, please put this code in the back template:
 
 *To edit the card code, please go to Tools > Manage Note Types > (you custom created card) > Cards, then you can edit the front and back template.*
+
+You can just change the `Traduction` by `Hangeul` for the back template of the other card.
 ```html
 {{FrontSide}}
 
